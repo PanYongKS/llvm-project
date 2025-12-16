@@ -1828,6 +1828,13 @@ bool supportsScaleOffset(const MCInstrInfo &MII, unsigned Opcode);
 /// must be defined in terms of bytes.
 unsigned getLdsDwGranularity(const MCSubtargetInfo &ST);
 
+/// @return true is register \R belongs to the range of [v0-v127].
+bool isLo128VGPR32(MCPhysReg R);
+
+/// @return true is register \R belongs to the range of [v0-v127] or it is any
+/// other register (like SGPR), just not in the range of [v128-v255].
+bool isNotHi128VGPR32(MCPhysReg R);
+
 class ClusterDimsAttr {
 public:
   enum class Kind { Unknown, NoCluster, VariableDims, FixedDims };
