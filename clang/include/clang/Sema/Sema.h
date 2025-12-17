@@ -7278,7 +7278,7 @@ public:
 
   ExprResult
   ActOnUnevaluatedStringLiteral(ArrayRef<Token> StringToks,
-                                ConversionAction Action = CA_ToExecEncoding);
+                                ConversionAction Action = CA_NoConversion);
 
   /// ControllingExprOrType is either an opaque pointer coming out of a
   /// ParsedType or an Expr *. FIXME: it'd be better to split this interface
