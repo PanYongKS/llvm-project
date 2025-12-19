@@ -1025,6 +1025,8 @@ endif()
 get_property(NB_LIBRARY_TARGET_NAME TARGET MLIRPythonModules.extension._mlir.dso PROPERTY LINK_LIBRARIES)
 list(GET NB_LIBRARY_TARGET_NAME 0 NB_LIBRARY_TARGET_NAME)
 add_mlir_library_install(${NB_LIBRARY_TARGET_NAME})
+set(LLVM_REQUIRES_EH ON)
+set(LLVM_REQUIRES_RTTI ON)
 add_mlir_library(MLIRPythonSupport
   ${PYTHON_SOURCE_DIR}/IRCore.cpp
   ${PYTHON_SOURCE_DIR}/Globals.cpp
@@ -1041,6 +1043,7 @@ if((CMAKE_SYSTEM_NAME STREQUAL "Linux") AND (NOT LLVM_USE_SANITIZER))
   target_link_options(MLIRPythonSupport PRIVATE "-Wl,-z,undefs")
   target_link_options(${NB_LIBRARY_TARGET_NAME} PRIVATE "-Wl,-z,undefs")
 endif()
+nanobind_compile_options(MLIRPythonSupport)
 nanobind_link_options(MLIRPythonSupport)
 set_target_properties(MLIRPythonSupport PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY "${MLIRPythonModules_ROOT_PREFIX}/_mlir_libs"
@@ -1058,7 +1061,10 @@ set_target_properties(${NB_LIBRARY_TARGET_NAME} PROPERTIES
 )
 set(eh_rtti_enable)
 if(MSVC)
-  set(eh_rtti_enable /EHsc /GR)
+  set(eh_rtti_enable /EHsc /GR /MD)
+  set_property(TARGET MLIRPythonSupport PROPERTY
+          MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+  set_property(TARGET MLIRPythonSupport PROPERTY WINDOWS_EXPORT_ALL_SYMBOLS ON)
 elseif(LLVM_COMPILER_IS_GCC_COMPATIBLE OR CLANG_CL)
   set(eh_rtti_enable -frtti -fexceptions)
 endif()
