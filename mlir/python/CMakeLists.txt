@@ -1064,7 +1064,7 @@ if(MSVC)
   set(eh_rtti_enable /EHsc /GR /MD)
   set_property(TARGET MLIRPythonSupport PROPERTY
           MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
-  set_property(TARGET MLIRPythonSupport PROPERTY WINDOWS_EXPORT_ALL_SYMBOLS ON)
+  # set_property(TARGET MLIRPythonSupport PROPERTY WINDOWS_EXPORT_ALL_SYMBOLS ON)
 elseif(LLVM_COMPILER_IS_GCC_COMPATIBLE OR CLANG_CL)
   set(eh_rtti_enable -frtti -fexceptions)
 endif()
